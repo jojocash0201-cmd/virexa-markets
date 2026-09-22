@@ -4,21 +4,91 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Virexa Markets — Trade Beyond Boundaries</title>
+<meta name="description" content="Virexa Markets — modern forex and CFD brokerage platform concept.">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#07111f;color:#fff}nav{padding:22px 7%;border-bottom:1px solid #1d344b;display:flex;justify-content:space-between}.logo{font-size:24px;font-weight:800}.logo span,h1 span{color:#38bdf8}nav a{color:#dbeafe;text-decoration:none;margin-left:18px}.hero{padding:80px 7%;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}h1{font-size:clamp(42px,7vw,72px);line-height:1.05;margin:0 0 20px}.hero p{color:#a9bdd2;font-size:19px}.btn{display:inline-block;margin-top:15px;background:#38bdf8;color:#04111f;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:800}.card{background:#0d1d30;border:1px solid #1e3b58;border-radius:18px;padding:25px}.quote{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #20384f}.up{color:#38d996}section{padding:55px 7%}.title{text-align:center}.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.plan p,.plan li,.notice{color:#a9bdd2}.plan ul{padding:0;list-style:none}.plan li{margin:10px 0}footer{text-align:center;padding:30px;color:#8198ae;border-top:1px solid #18304a}@media(max-width:800px){.hero,.plans{grid-template-columns:1fr}nav a{font-size:13px;margin-left:8px}}
+:root{--bg:#06101f;--panel:#0c1b2e;--line:#1b3653;--text:#f5f8fc;--muted:#9fb0c5;--blue:#28b8ff;--blue2:#087cff;--green:#21d59b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% 0,#12345a 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5}
+a{text-decoration:none;color:inherit}.wrap{width:min(1120px,92%);margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(6,16,31,.9);backdrop-filter:blur(14px);border-bottom:1px solid #18304a}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:900;font-size:24px;letter-spacing:-1px}.brand span{color:var(--blue)}.links{display:flex;gap:22px;color:#c8d5e5;font-size:14px}.links a:hover{color:white}.actions{display:flex;gap:9px}
+.btn{border:1px solid var(--line);border-radius:11px;padding:11px 17px;font-weight:800;cursor:pointer;background:#0b1829;color:white}.btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));border:0;color:#03101d}
+.hero{padding:85px 0 55px}.heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center}.eyebrow{display:inline-block;padding:7px 11px;border:1px solid #205071;border-radius:999px;background:#092137;color:#9edfff;font-size:11px;font-weight:900}
+h1{font-size:clamp(46px,7vw,76px);line-height:.98;letter-spacing:-3px;margin:18px 0}h1 span{color:var(--blue)}.hero p{font-size:18px;color:var(--muted);max-width:650px}.heroActions{display:flex;gap:11px;flex-wrap:wrap;margin:27px 0}.notice,.small{font-size:12px;color:#91a5bb}
+.preview{background:linear-gradient(180deg,#0d2238,#091827);border:1px solid #1c3b5b;border-radius:24px;padding:23px;box-shadow:0 25px 80px #0004}.top{display:flex;justify-content:space-between}.live{color:var(--green);font-size:11px;font-weight:900}.chart{height:155px;margin-top:18px;border-radius:15px;background:linear-gradient(180deg,#28b8ff18,transparent);border:1px solid #173652;position:relative;overflow:hidden}.chart:after{content:"";position:absolute;inset:30px -10px 20px;background:linear-gradient(145deg,transparent 0 18%,#28b8ff 19% 20%,transparent 21% 31%,#28b8ff 32% 33%,transparent 34% 48%,#21d59b 49% 50%,transparent 51% 65%,#28b8ff 66% 67%,transparent 68%);transform:skewY(-9deg)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.stat{background:#0a1929;border:1px solid #17324c;border-radius:12px;padding:11px}.stat small{display:block;color:var(--muted)}.stat b{font-size:15px}
+section{padding:60px 0}.head{margin-bottom:24px}.head h2{font-size:32px;margin:0 0 6px}.head p{margin:0;color:var(--muted);max-width:720px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.market,.card,.feature{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:19px}.row{display:flex;justify-content:space-between}.symbol{font-weight:900}.up{color:var(--green);font-weight:900;font-size:13px}.price{font-size:21px;margin:12px 0 2px}.muted{color:var(--muted);font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card{padding:24px;background:linear-gradient(180deg,#0c1c2e,#091625)}.card.featured{border-color:#168bd0;box-shadow:0 0 0 1px #28b8ff1a,0 20px 60px #0003}.pill{font-size:10px;font-weight:900;color:#8fdcff;background:#09243a;padding:6px 9px;border-radius:999px}.card h3{font-size:24px;margin:15px 0 7px}.card p,.card li{color:var(--muted)}.card li{margin:8px 0}.card .btn{width:100%;margin-top:12px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.feature h3{margin:9px 0 4px}.feature p{margin:0;color:var(--muted);font-size:14px}.icon{font-size:24px}
+.banner{background:linear-gradient(135deg,#0d2a45,#0a1727);border:1px solid #1c5075;border-radius:22px;padding:30px;display:flex;justify-content:space-between;align-items:center;gap:20px}.banner h2{margin:0 0 5px}.banner p{margin:0;color:var(--muted)}
+.faq{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line);padding:18px 0}summary{cursor:pointer;font-weight:800}details p{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:13px}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:50;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.box{width:min(450px,100%);background:#0b1a2c;border:1px solid #245071;border-radius:20px;padding:24px}.close{float:right;background:none;border:0;color:white;font-size:25px;cursor:pointer}.field{margin:13px 0}.field label{display:block;font-size:12px;color:#aebed0;margin-bottom:6px}.field input{width:100%;padding:13px;border-radius:10px;border:1px solid #24425e;background:#071322;color:white}.box .btn{width:100%}
+@media(max-width:850px){.heroGrid{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}.cards,.features{grid-template-columns:1fr}.links{display:none}.banner{flex-direction:column;align-items:flex-start}}
+@media(max-width:520px){.grid4{grid-template-columns:1fr}.hero{padding-top:55px}h1{font-size:47px}.stats{grid-template-columns:1fr}.actions .ghost{display:none}}
 </style>
 </head>
 <body>
-<nav><div class="logo">VIREXA <span>MARKETS</span></div><div><a href="#markets">Markets</a><a href="#accounts">Accounts</a></div></nav>
-<section class="hero">
-<div><h1>Trade <span>Beyond</span> Boundaries.</h1><p>Virexa Markets is a modern trading-platform concept for a clear and professional forex and CFD client experience.</p><a class="btn" href="#accounts">Open an Account</a><p class="notice">Preview website — live trading, deposits and withdrawals are not enabled.</p></div>
-<div class="card" id="markets"><h2>Market Watch</h2><div class="quote"><b>EUR/USD</b><span>1.1742</span><span class="up">+0.32%</span></div><div class="quote"><b>GBP/USD</b><span>1.3468</span><span class="up">+0.21%</span></div><div class="quote"><b>USD/JPY</b><span>147.82</span><span class="up">+0.18%</span></div><div class="quote"><b>XAU/USD</b><span>3,742.60</span><span class="up">+0.45%</span></div></div>
-</section>
-<section id="accounts"><h2 class="title">Choose Your Account</h2><div class="plans">
-<div class="card plan"><h2>Standard</h2><p>A straightforward trading experience.</p><ul><li>✓ Market watch</li><li>✓ Client dashboard</li><li>✓ Standard account concept</li></ul></div>
-<div class="card plan"><h2>Pro</h2><p>Designed for experienced traders.</p><ul><li>✓ Advanced dashboard concept</li><li>✓ Professional workflow</li><li>✓ Enhanced account concept</li></ul></div>
-<div class="card plan"><h2>Demo</h2><p>Explore the platform without real money.</p><ul><li>✓ Practice environment</li><li>✓ Market interface</li><li>✓ Risk-free testing</li></ul></div>
+<header><div class="wrap nav">
+<a class="brand" href="#home">VIREXA <span>MARKETS</span></a>
+<nav class="links"><a href="#markets">Markets</a><a href="#accounts">Accounts</a><a href="#why">Why Virexa</a><a href="#faq">FAQ</a></nav>
+<div class="actions"><button class="btn ghost" onclick="openM('login')">Log in</button><button class="btn primary" onclick="openM('signup')">Open account</button></div>
+</div></header>
+
+<main id="home">
+<section class="hero"><div class="wrap heroGrid">
+<div><span class="eyebrow">FOREX • CFDs • MODERN CLIENT EXPERIENCE</span>
+<h1>Trade <span>Beyond</span> Boundaries.</h1>
+<p>Virexa Markets is a modern brokerage platform concept built around a clean client experience, transparent account information and security-first architecture.</p>
+<div class="heroActions"><button class="btn primary" onclick="openM('signup')">Open an Account →</button><a class="btn ghost" href="#markets">Explore Markets</a></div>
+<div class="notice">Preview environment — live trading, deposits, withdrawals and client-money custody are not enabled.</div></div>
+<div class="preview"><div class="top"><strong>Market overview</strong><span class="live">● MARKET WATCH</span></div><div class="chart"></div>
+<div class="stats"><div class="stat"><small>EUR/USD</small><b>1.1742</b></div><div class="stat"><small>GBP/USD</small><b>1.3468</b></div><div class="stat"><small>XAU/USD</small><b>3,742.60</b></div></div></div>
 </div></section>
-<section><div class="card"><h2>Virexa Markets</h2><p class="notice">Development/preview interface only. It does not accept client funds, execute live trades, provide custody, or represent that Virexa Markets is licensed or authorized.</p></div></section>
-<footer>© 2026 Virexa Markets. All rights reserved.</footer>
-</body></html>
+
+<section id="markets"><div class="wrap"><div class="head"><h2>Markets at a glance</h2><p>Illustrative market data for the website preview. Production feeds will be connected only after appropriate trading infrastructure is in place.</p></div>
+<div class="grid4">
+<div class="market"><div class="row"><span class="symbol">EUR/USD</span><span class="up">+0.32%</span></div><div class="price">1.1742</div><div class="muted">Euro / US Dollar</div></div>
+<div class="market"><div class="row"><span class="symbol">GBP/USD</span><span class="up">+0.21%</span></div><div class="price">1.3468</div><div class="muted">British Pound / US Dollar</div></div>
+<div class="market"><div class="row"><span class="symbol">USD/JPY</span><span class="up">+0.18%</span></div><div class="price">147.82</div><div class="muted">US Dollar / Japanese Yen</div></div>
+<div class="market"><div class="row"><span class="symbol">XAU/USD</span><span class="up">+0.45%</span></div><div class="price">3,742.60</div><div class="muted">Gold / US Dollar</div></div>
+</div></div></section>
+
+<section id="accounts"><div class="wrap"><div class="head"><h2>Choose your account</h2><p>These are product concepts. Final leverage, spreads, fees and eligibility should be defined through the approved operating and regulatory framework.</p></div>
+<div class="cards">
+<div class="card"><span class="pill">STARTER</span><h3>Standard</h3><p>A straightforward account concept for clients who want a simple trading experience.</p><ul><li>Simple account structure</li><li>Market access interface</li><li>Client portal</li><li>KYC workflow</li></ul><button class="btn ghost" onclick="openM('signup')">Choose Standard</button></div>
+<div class="card featured"><span class="pill">POPULAR CONCEPT</span><h3>Pro</h3><p>A professional account concept designed for experienced market participants.</p><ul><li>Advanced client dashboard</li><li>Detailed account information</li><li>Risk & security controls</li><li>Priority workflow concept</li></ul><button class="btn primary" onclick="openM('signup')">Choose Pro</button></div>
+<div class="card"><span class="pill">PRACTICE</span><h3>Demo</h3><p>A practice environment concept for learning the interface without real-money activity.</p><ul><li>Practice-focused experience</li><li>Market-watch interface</li><li>No client-money custody</li><li>Platform testing</li></ul><button class="btn ghost" onclick="openM('signup')">Try Demo</button></div>
+</div></div></section>
+
+<section id="why"><div class="wrap"><div class="head"><h2>Built around trust and control</h2><p>The platform is being designed with security, operational controls and separation between the public website, client portal and administrator functions.</p></div>
+<div class="features">
+<div class="feature"><div class="icon">🔐</div><h3>Security-first</h3><p>Server-side authentication and role-based access are part of the full-stack architecture.</p></div>
+<div class="feature"><div class="icon">🪪</div><h3>KYC workflow</h3><p>Client identity verification can be reviewed through an administrator workflow before regulated services are activated.</p></div>
+<div class="feature"><div class="icon">📋</div><h3>Audit visibility</h3><p>Administrative actions can be logged for operational review and accountability.</p></div>
+<div class="feature"><div class="icon">📊</div><h3>Client dashboard</h3><p>Clients can have one place for account information, activity and security controls.</p></div>
+<div class="feature"><div class="icon">⚙️</div><h3>Admin controls</h3><p>Separate administrator functions keep privileged operations away from the public interface.</p></div>
+<div class="feature"><div class="icon">🌍</div><h3>Global-ready UI</h3><p>Responsive design works across phones, tablets and desktop screens.</p></div>
+</div></div></section>
+
+<section><div class="wrap"><div class="banner"><div><h2>Ready to explore Virexa?</h2><p>Create a preview account to test the client experience.</p></div><button class="btn primary" onclick="openM('signup')">Create Account</button></div></div></section>
+
+<section id="faq"><div class="wrap"><div class="head"><h2>Frequently asked questions</h2><p>Important information for the current preview environment.</p></div><div class="faq">
+<details><summary>Can I deposit money right now?</summary><p>No. Deposits, withdrawals and client-money custody are intentionally disabled in this preview environment.</p></details>
+<details><summary>Is live trading available?</summary><p>No. The market values shown are illustrative. A production execution connection has not been activated.</p></details>
+<details><summary>Can I create an account?</summary><p>The page provides a preview registration interface. Production onboarding should only be enabled after the required legal, regulatory, KYC/AML and operational arrangements are completed.</p></details>
+<details><summary>Will Virexa have an admin portal?</summary><p>Yes. The separate full-stack development build includes administrator authentication, client management, KYC workflow and audit visibility.</p></details>
+</div></div></section>
+</main>
+
+<footer><div class="wrap foot"><div>© 2026 Virexa Markets. Platform concept / development environment.</div><div><a href="#faq">FAQ</a> · <a href="#why">Security</a> · <a href="#accounts">Accounts</a></div></div></footer>
+
+<div class="modal" id="login"><div class="box"><button class="close" onclick="closeM()">×</button><h2>Welcome back</h2><p class="small">Client login preview. Connect this form to the full-stack authentication service before production use.</p><div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn primary" onclick="alert('Login is currently a preview feature. Connect the full-stack client portal for real authentication.')">Log in</button></div></div>
+<div class="modal" id="signup"><div class="box"><button class="close" onclick="closeM()">×</button><h2>Create your Virexa account</h2><p class="small">Preview registration form. Real-money onboarding is not enabled.</p><div class="field"><label>Full name</label><input type="text" placeholder="Your full name"></div><div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input type="password" placeholder="Create a strong password"></div><button class="btn primary" onclick="alert('Preview registration submitted. Production onboarding will be connected after compliance and backend setup.')">Create account</button></div></div>
+<script>
+function openM(id){document.getElementById(id).classList.add('show')}
+function closeM(){document.querySelectorAll('.modal').forEach(x=>x.classList.remove('show'))}
+document.querySelectorAll('.modal').forEach(x=>x.addEventListener('click',e=>{if(e.target===x)x.classList.remove('show')}))
+</script>
+</body>
+</html>
