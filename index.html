@@ -1,62 +1,49 @@
 <script>
 /* =========================================
    VIREXA MARKETS — CLIENT SYSTEM
-   DEVELOPMENT VERSION
+   BACKEND CONNECTED DEVELOPMENT VERSION
    ========================================= */
 
-const USERS_KEY = "virexa_users";
-const SESSION_KEY = "virexa_session";
+const API_BASE = "https://virexa-markets-backend.onrender.com";
 
 
 /* =========================================
-   STORAGE
+   API HELPER
    ========================================= */
 
-function getUsers() {
-  try {
-    return JSON.parse(
-      localStorage.getItem(USERS_KEY) || "[]"
-    );
-  } catch (error) {
-    console.error("Unable to read users:", error);
-    return [];
-  }
-}
+async function apiRequest(endpoint, options = {}) {
 
-
-function saveUsers(users) {
-  localStorage.setItem(
-    USERS_KEY,
-    JSON.stringify(users)
+  const response = await fetch(
+    API_BASE + endpoint,
+    {
+      ...options,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
+    }
   );
-}
 
+  let data = {};
 
-function getSession() {
   try {
-    return JSON.parse(
-      localStorage.getItem(SESSION_KEY) || "null"
-    );
+    data = await response.json();
   } catch (error) {
-    return null;
+    data = {};
   }
-}
 
+  if (!response.ok) {
 
-function saveSession(user) {
-  localStorage.setItem(
-    SESSION_KEY,
-    JSON.stringify({
-      id: user.id,
-      name: user.name,
-      email: user.email
-    })
-  );
-}
+    throw new Error(
+      data.message ||
+      data.error ||
+      "Something went wrong. Please try again."
+    );
 
+  }
 
-function clearSession() {
-  localStorage.removeItem(SESSION_KEY);
+  return data;
 }
 
 
@@ -111,12 +98,15 @@ function showMessage(id, message, type) {
 
   const element = document.getElementById(id);
 
-  if (!element) return;
+  if (!element) {
+    console.log(message);
+    return;
+  }
 
   element.textContent = message;
 
   element.className =
-    "formMessage " + type;
+    "formMessage " + (type || "");
 }
 
 
@@ -156,24 +146,10 @@ function showDashboard(user) {
   }
 
 
+  /* NAME */
+
   const dashName =
     document.getElementById("dashName");
-
-  const dashEmail =
-    document.getElementById("dashEmail");
-
-  const dashId =
-    document.getElementById("dashId");
-
-  const dashBalance =
-    document.getElementById("dashBalance");
-
-  const dashEquity =
-    document.getElementById("dashEquity");
-
-  const dashCreated =
-    document.getElementById("dashCreated");
-
 
   if (dashName) {
     dashName.textContent =
@@ -181,11 +157,21 @@ function showDashboard(user) {
   }
 
 
+  /* EMAIL */
+
+  const dashEmail =
+    document.getElementById("dashEmail");
+
   if (dashEmail) {
     dashEmail.textContent =
       user.email || "—";
   }
 
+
+  /* CLIENT ID */
+
+  const dashId =
+    document.getElementById("dashId");
 
   if (dashId) {
     dashId.textContent =
@@ -193,34 +179,63 @@ function showDashboard(user) {
   }
 
 
+  /* BALANCE */
+
+  const dashBalance =
+    document.getElementById("dashBalance");
+
   if (dashBalance) {
+
     dashBalance.textContent =
       "$" +
       Number(user.balance || 0).toFixed(2);
+
   }
 
 
+  /* EQUITY */
+
+  const dashEquity =
+    document.getElementById("dashEquity");
+
   if (dashEquity) {
+
     dashEquity.textContent =
       "$" +
       Number(user.equity || 0).toFixed(2);
+
   }
 
+
+  /* ACCOUNT CREATED */
+
+  const dashCreated =
+    document.getElementById("dashCreated");
 
   if (dashCreated) {
 
     if (user.createdAt) {
 
-      dashCreated.textContent =
-        new Date(
-          user.createdAt
-        ).toLocaleDateString();
+      const date =
+        new Date(user.createdAt);
+
+      if (!isNaN(date.getTime())) {
+
+        dashCreated.textContent =
+          date.toLocaleDateString();
+
+      } else {
+
+        dashCreated.textContent = "—";
+
+      }
 
     } else {
 
       dashCreated.textContent = "—";
 
     }
+
   }
 
 
@@ -232,7 +247,7 @@ function showDashboard(user) {
 
 
 /* =========================================
-   RETURN TO PUBLIC WEBSITE
+   RETURN TO WEBSITE
    ========================================= */
 
 function returnToWebsite() {
@@ -265,6 +280,11 @@ function returnToWebsite() {
   if (siteFooter) {
     siteFooter.style.display = "block";
   }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 
@@ -272,16 +292,27 @@ function returnToWebsite() {
    LOGOUT
    ========================================= */
 
-function logout() {
+async function logout() {
 
-  clearSession();
+  try {
+
+    await apiRequest(
+      "/api/logout",
+      {
+        method: "POST"
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Logout error:",
+      error
+    );
+
+  }
 
   returnToWebsite();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
 }
 
 
@@ -292,8 +323,9 @@ function logout() {
 function showSecurity() {
 
   alert(
-    "Virexa Markets security is currently running in development mode. Production authentication will use secure server-side authentication."
+    "Virexa Markets authentication is connected to the development backend. Secure server-side authentication is being used for client sessions."
   );
+
 }
 
 
@@ -301,7 +333,7 @@ function showSecurity() {
    SIGNUP
    ========================================= */
 
-function handleSignup(event) {
+async function handleSignup(event) {
 
   event.preventDefault();
 
@@ -329,8 +361,10 @@ function handleSignup(event) {
       "Signup form fields are missing."
     );
 
-    alert(
-      "Signup system could not find the required fields."
+    showMessage(
+      "signupMessage",
+      "Signup form could not be loaded correctly.",
+      "error"
     );
 
     return;
@@ -354,6 +388,8 @@ function handleSignup(event) {
       : password;
 
 
+  /* VALIDATION */
+
   if (name.length < 2) {
 
     showMessage(
@@ -366,11 +402,11 @@ function handleSignup(event) {
   }
 
 
-  if (!email) {
+  if (!email || !email.includes("@")) {
 
     showMessage(
       "signupMessage",
-      "Please enter your email address.",
+      "Please enter a valid email address.",
       "error"
     );
 
@@ -402,76 +438,72 @@ function handleSignup(event) {
   }
 
 
-  const users = getUsers();
-
-
-  const existingUser =
-    users.find(
-      user =>
-        user.email === email
-    );
-
-
-  if (existingUser) {
-
-    showMessage(
-      "signupMessage",
-      "An account with this email already exists.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const user = {
-
-    id:
-      "VX-" +
-      Date.now()
-        .toString()
-        .slice(-8),
-
-    name: name,
-
-    email: email,
-
-    password: password,
-
-    balance: 0,
-
-    equity: 0,
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  users.push(user);
-
-  saveUsers(users);
-
-  saveSession(user);
-
-
   showMessage(
     "signupMessage",
-    "Account created successfully! Opening dashboard...",
+    "Creating your Virexa account...",
     "success"
   );
 
 
-  setTimeout(
-    function() {
+  try {
 
-      closeM("signup");
+    /* SEND ACCOUNT TO BACKEND */
 
-      showDashboard(user);
+    const data =
+      await apiRequest(
+        "/api/register",
+        {
+          method: "POST",
 
-    },
-    700
-  );
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password
+          })
+        }
+      );
+
+
+    const user =
+      data.user || data;
+
+
+    showMessage(
+      "signupMessage",
+      "Account created successfully!",
+      "success"
+    );
+
+
+    setTimeout(
+      function() {
+
+        closeM("signup");
+
+        showDashboard(user);
+
+      },
+      500
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Signup error:",
+      error
+    );
+
+
+    showMessage(
+      "signupMessage",
+      error.message ||
+      "Unable to create your account.",
+      "error"
+    );
+
+  }
+
 }
 
 
@@ -479,7 +511,7 @@ function handleSignup(event) {
    LOGIN
    ========================================= */
 
-function handleLogin(event) {
+async function handleLogin(event) {
 
   event.preventDefault();
 
@@ -496,8 +528,10 @@ function handleLogin(event) {
     !passwordElement
   ) {
 
-    alert(
-      "Login system could not find the required fields."
+    showMessage(
+      "loginMessage",
+      "Login form could not be loaded correctly.",
+      "error"
     );
 
     return;
@@ -513,22 +547,11 @@ function handleLogin(event) {
     passwordElement.value;
 
 
-  const users = getUsers();
-
-
-  const user =
-    users.find(
-      item =>
-        item.email === email &&
-        item.password === password
-    );
-
-
-  if (!user) {
+  if (!email) {
 
     showMessage(
       "loginMessage",
-      "Incorrect email or password.",
+      "Please enter your email address.",
       "error"
     );
 
@@ -536,31 +559,153 @@ function handleLogin(event) {
   }
 
 
-  saveSession(user);
+  if (!password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter your password.",
+      "error"
+    );
+
+    return;
+  }
 
 
   showMessage(
     "loginMessage",
-    "Login successful! Opening dashboard...",
+    "Signing you in...",
     "success"
   );
 
 
-  setTimeout(
-    function() {
+  try {
 
-      closeM("login");
+    /* LOGIN THROUGH BACKEND */
+
+    const data =
+      await apiRequest(
+        "/api/login",
+        {
+          method: "POST",
+
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        }
+      );
+
+
+    const user =
+      data.user || data;
+
+
+    showMessage(
+      "loginMessage",
+      "Login successful!",
+      "success"
+    );
+
+
+    /* GET COMPLETE USER PROFILE */
+
+    try {
+
+      const profile =
+        await apiRequest("/api/me");
+
+      if (profile && profile.user) {
+        showDashboard(profile.user);
+      } else {
+        showDashboard(user);
+      }
+
+    } catch (profileError) {
+
+      console.warn(
+        "Could not load complete profile:",
+        profileError
+      );
 
       showDashboard(user);
 
-    },
-    500
-  );
+    }
+
+
+    setTimeout(
+      function() {
+
+        closeM("login");
+
+      },
+      300
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Login error:",
+      error
+    );
+
+
+    showMessage(
+      "loginMessage",
+      error.message ||
+      "Incorrect email or password.",
+      "error"
+    );
+
+  }
+
 }
 
 
 /* =========================================
-   INITIALISE SYSTEM
+   CHECK EXISTING BACKEND SESSION
+   ========================================= */
+
+async function restoreBackendSession() {
+
+  try {
+
+    const data =
+      await apiRequest("/api/me");
+
+
+    if (
+      data &&
+      data.user
+    ) {
+
+      console.log(
+        "Existing Virexa session restored."
+      );
+
+      showDashboard(data.user);
+
+    }
+
+  } catch (error) {
+
+    /*
+      No active session.
+      This is normal when visiting
+      the website for the first time.
+    */
+
+    console.log(
+      "No active Virexa session."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   INITIALISE VIREXA
    ========================================= */
 
 function initializeVirexa() {
@@ -570,7 +715,7 @@ function initializeVirexa() {
   );
 
 
-  /* SIGNUP FORM */
+  /* SIGNUP */
 
   const signupForm =
     document.getElementById("signupForm");
@@ -583,10 +728,16 @@ function initializeVirexa() {
       handleSignup
     );
 
+  } else {
+
+    console.warn(
+      "signupForm was not found."
+    );
+
   }
 
 
-  /* LOGIN FORM */
+  /* LOGIN */
 
   const loginForm =
     document.getElementById("loginForm");
@@ -599,10 +750,16 @@ function initializeVirexa() {
       handleLogin
     );
 
+  } else {
+
+    console.warn(
+      "loginForm was not found."
+    );
+
   }
 
 
-  /* CLOSE MODAL WHEN BACKGROUND IS CLICKED */
+  /* MODAL BACKGROUND CLICK */
 
   document.addEventListener(
     "click",
@@ -637,36 +794,9 @@ function initializeVirexa() {
   );
 
 
-  /* RESTORE SESSION */
+  /* CHECK BACKEND SESSION */
 
-  const session =
-    getSession();
-
-
-  if (session) {
-
-    const users =
-      getUsers();
-
-
-    const user =
-      users.find(
-        item =>
-          item.id === session.id
-      );
-
-
-    if (user) {
-
-      showDashboard(user);
-
-    } else {
-
-      clearSession();
-
-    }
-
-  }
+  restoreBackendSession();
 
 }
 
