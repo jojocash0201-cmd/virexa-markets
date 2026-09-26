@@ -1519,5 +1519,27 @@ window.openLogin = function(){
   document.getElementById("authMode").value = "login";
 };
 </script>
+<script>
+window.submitAuth = function(){
+  const name = document.getElementById("authName").value.trim();
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+
+  if(!email || !password || password.length < 6){
+    alert("Please enter a valid email and a password of at least 6 characters.");
+    return;
+  }
+
+  const user = {
+    name: name || "Demo Trader",
+    email: email
+  };
+
+  localStorage.setItem("virexaUser", JSON.stringify(user));
+
+  closeModal();
+  enterDashboard();
+};
+</script>
 </body>
 </html>
