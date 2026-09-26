@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Virexa Markets — modern forex and CFD brokerage platform concept.">
+<title>Virexa Markets — Trade Beyond Boundaries</title>
+
+<style>
+:root{
+  --bg:#06111f;
+  --panel:#0b1b2e;
+  --panel2:#10253c;
+  --text:#eef7ff;
+  --muted:#91a7bd;
+  --green:#21d39a;
+  --blue:#4ea1ff;
+  --red:#ff5f6d;
+  --border:rgba(255,255,255,.09)
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:radial-gradient(circle at 80% 0%,#123253 0,#06111f 42%);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.container{
+  width:min(1180px,92%);
+  margin:auto
+}
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(6,17,31,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border)
+}
+
+.nav{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800
+}
+
+.logo span{color:var(--green)}
+
+.links{
+  display:flex;
+  gap:20px
+}
+
+.links a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px
+}
+
+.actions{
+  display:flex;
+  gap:8px
+}
+
+.btn{
+  padding:11px 17px;
+  border-radius:10px;
+  font-weight:700;
+  border:0
+}
+
+.primary{
+  background:var(--green);
+  color:#03130e
+}
+
+.secondary{
+  background:#17314d;
+  color:white;
+  border:1px solid var(--border)
+}
+
+.hero{
+  padding:85px 0 60px
+}
+
+.heroGrid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:40px;
+  align-items:center
+}
+
+.badge{
+  display:inline-block;
+  color:var(--green);
+  background:rgba(33,211,154,.08);
+  border:1px solid rgba(33,211,154,.2);
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800
+}
+
+h1{
+  font-size:clamp(42px,7vw,74px);
+  line-height:.98;
+  margin:18px 0
+}
+
+h1 span{color:var(--green)}
+
+.hero p{
+  color:var(--muted);
+  font-size:18px;
+  max-width:650px
+}
+
+.heroButtons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:25px
+}
+
+.marketBox{
+  background:linear-gradient(145deg,#102a45,#081827);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px
+}
+
+.market{
+  display:flex;
+  justify-content:space-between;
+  padding:14px 0;
+  border-bottom:1px solid var(--border)
+}
+
+.market:last-child{border:0}
+
+.green{color:var(--green)}
+.red{color:var(--red)}
+
+section{padding:70px 0}
+
+.heading{
+  margin-bottom:25px
+}
+
+.heading h2{
+  font-size:34px;
+  margin:0 0 6px
+}
+
+.heading p{
+  color:var(--muted)
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px
+}
+
+.card{
+  background:rgba(11,27,46,.85);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:23px
+}
+
+.card p{color:var(--muted)}
+
+.accounts{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px
+}
+
+.account{
+  position:relative
+}
+
+.popular{
+  position:absolute;
+  top:15px;
+  right:15px;
+  color:var(--green);
+  font-size:11px
+}
+
+.account li{
+  color:var(--muted);
+  margin:8px 0
+}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:30px 0;
+  color:var(--muted);
+  font-size:13px
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:18px
+}
+
+.modal.show{display:flex}
+
+.modalBox{
+  width:min(450px,100%);
+  background:#091a2c;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  position:relative
+}
+
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  background:none;
+  color:white;
+  border:0;
+  font-size:25px
+}
+
+.field{
+  margin:14px 0
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:6px
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:12px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:#071523;
+  color:white
+}
+
+.message{
+  min-height:22px;
+  font-size:13px;
+  color:var(--red)
+}
+
+/* DASHBOARD */
+
+#dashboard{
+  display:none
+}
+
+.dashboardTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px
+}
+
+.balance{
+  font-size:32px;
+  font-weight:800
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:20px 0
+}
+
+.stat{
+  background:#081827;
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:10px
+}
+
+.stat small{
+  display:block;
+  color:var(--muted)
+}
+
+.stat strong{
+  display:block;
+  margin-top:4px
+}
+
+.tradeGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px
+}
+
+.tradeBox{
+  background:#0b1b2e;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px
+}
+
+.tabs{
+  display:flex;
+  gap:8px
+}
+
+.tabs button{
+  flex:1;
+  padding:11px;
+  border:0;
+  border-radius:8px;
+  background:#142b43;
+  color:white
+}
+
+.tabs .buyActive{
+  background:rgba(33,211,154,.18);
+  color:var(--green)
+}
+
+.tabs .sellActive{
+  background:rgba(255,95,109,.16);
+  color:var(--red)
+}
+
+.tableBox{
+  margin-top:18px;
+  background:#0b1b2e;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  overflow:auto
+}
+
+table{
+  width:100%;
+  border-collapse:collapse
+}
+
+th,td{
+  text-align:left;
+  padding:11px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  white-space:nowrap
+}
+
+th{color:var(--muted)}
+
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  background:#102a42;
+  border:1px solid var(--border);
+  padding:13px 16px;
+  border-radius:10px;
+  display:none;
+  z-index:200
+}
+
+.toast.show{display:block}
+
+@media(max-width:850px){
+  .heroGrid,
+  .tradeGrid{
+    grid-template-columns:1fr
+  }
+
+  .cards,
+  .accounts{
+    grid-template-columns:1fr
+  }
+
+  .links{
+    display:none
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr)
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<div class="container nav">
+
+<div class="logo">
+Virexa <span>Markets</span>
+</div>
+
+<div class="links">
+<a href="#markets">Markets</a>
+<a href="#accounts">Accounts</a>
+<a href="#why">Why Virexa</a>
+<a href="#faq">FAQ</a>
+</div>
+
+<div class="actions">
+<button class="btn secondary" onclick="openLogin()">Log in</button>
+<button class="btn primary" onclick="openSignup()">Open account</button>
+</div>
+
+</div>
+</nav>
+
+<main id="landing">
+
+<section class="hero">
+
+<div class="container heroGrid">
+
+<div>
+
+<span class="badge">
+SIMULATED TRADING ENVIRONMENT
+</span>
+
+<h1>
+Trade <span>Beyond</span> Boundaries.
+</h1>
+
+<p>
+Explore a modern forex and CFD brokerage platform concept with simulated markets, educational tools and AI-assisted market analysis.
+</p>
+
+<div class="heroButtons">
+
+<button class="btn primary" onclick="openSignup()">
+Create demo account
+</button>
+
+<button class="btn secondary" onclick="openLogin()">
+Log in
+</button>
+
+</div>
+
+</div>
+
+<div class="marketBox">
+
+<h3>Market Watch</h3>
+
+<div id="marketWatch"></div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="markets">
+
+<div class="container">
+
+<div class="heading">
+<h2>Markets</h2>
+<p>Illustrative prices for the Virexa demo environment.</p>
+</div>
+
+<div class="cards" id="marketCards"></div>
+
+</div>
+
+</section>
+
+<section id="accounts">
+
+<div class="container">
+
+<div class="heading">
+<h2>Choose your account</h2>
+<p>Start with a simulated environment while the platform is being developed.</p>
+</div>
+
+<div class="accounts">
+
+<div class="card account">
+<h3>Standard</h3>
+<p>Simple tools for learning and exploring the platform.</p>
+<ul>
+<li>Demo balance</li>
+<li>Market watch</li>
+<li>Simulated orders</li>
+</ul>
+<button class="btn secondary" onclick="openSignup()">Choose Standard</button>
+</div>
+
+<div class="card account">
+<span class="popular">POPULAR</span>
+<h3>Pro</h3>
+<p>More advanced controls for experienced demo users.</p>
+<ul>
+<li>Leverage controls</li>
+<li>Stop Loss / Take Profit</li>
+<li>Advanced dashboard</li>
+</ul>
+<button class="btn primary" onclick="openSignup()">Choose Pro</button>
+</div>
+
+<div class="card account">
+<h3>Demo</h3>
+<p>Practice without real-money deposits or withdrawals.</p>
+<ul>
+<li>Virtual funds</li>
+<li>20 simulated markets</li>
+<li>AI-assisted education</li>
+</ul>
+<button class="btn secondary" onclick="openSignup()">Start Demo</button>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="why">
+
+<div class="container">
+
+<div class="heading">
+<h2>Why Virexa</h2>
+<p>Designed around clarity, practice and responsible development.</p>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h3>Practice First</h3>
+<p>
+Use virtual funds to understand orders, risk controls, margin and floating P/L before real-money functionality.
+</p>
+</div>
+
+<div class="card">
+<h3>AI-Assisted Learning</h3>
+<p>
+Receive educational market observations and explanations designed to support your own analysis.
+</p>
+</div>
+
+<div class="card">
+<h3>Transparent Concept</h3>
+<p>
+This is a development concept. Live trading, deposits, withdrawals and client-money custody are not enabled.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="faq">
+
+<div class="container">
+
+<div class="heading">
+<h2>FAQ</h2>
+<p>Important information about this development environment.</p>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h3>Is this real-money trading?</h3>
+<p>No. The current platform is simulated.</p>
+</div>
+
+<div class="card">
+<h3>Are prices live?</h3>
+<p>No. Market prices shown here are illustrative and simulated.</p>
+</div>
+
+<div class="card">
+<h3>What happens next?</h3>
+<p>Production onboarding would require appropriate legal, regulatory, KYC/AML and operational arrangements.</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+<div class="container">
+
+<div class="dashboardTop">
+
+<div>
+<div style="color:var(--muted)">Demo account</div>
+<div class="balance" id="balance">$10,000.00</div>
+</div>
+
+<button class="btn secondary" onclick="logout()">Log out</button>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<small>Equity</small>
+<strong id="equity">$10,000.00</strong>
+</div>
+
+<div class="stat">
+<small>Used Margin</small>
+<strong id="margin">$0.00</strong>
+</div>
+
+<div class="stat">
+<small>Free Margin</small>
+<strong id="freeMargin">$10,000.00</strong>
+</div>
+
+<div class="stat">
+<small>Open Positions</small>
+<strong id="positionCount">0</strong>
+</div>
+
+</div>
+
+<div class="tradeGrid">
+
+<div class="tradeBox">
+
+<h3>Place Simulated Trade</h3>
+
+<div class="tabs">
+
+<button id="buyButton"
+class="buyActive"
+onclick="setSide('BUY')">
+BUY
+</button>
+
+<button id="sellButton"
+onclick="setSide('SELL')">
+SELL
+</button>
+
+</div>
+
+<div class="field">
+<label>Market</label>
+<select id="tradeMarket"></select>
+</div>
+
+<div class="field">
+<label>Lot Size</label>
+<input id="lot" type="number" value="0.10" min="0.01" step="0.01">
+</div>
+
+<div class="field">
+<label>Leverage</label>
+<select id="leverage">
+<option value="10">1:10</option>
+<option value="50">1:50</option>
+<option value="100" selected>1:100</option>
+<option value="200">1:200</option>
+</select>
+</div>
+
+<div class="field">
+<label>Stop Loss</label>
+<input id="sl" type="number" placeholder="Optional price">
+</div>
+
+<div class="field">
+<label>Take Profit</label>
+<input id="tp" type="number" placeholder="Optional price">
+</div>
+
+<button class="btn primary" style="width:100%" onclick="placeTrade()">
+Place simulated BUY
+</button>
+
+<p style="color:var(--muted);font-size:12px">
+Simulation only. No real order is sent to a broker.
+</p>
+
+</div>
+
+<div class="tradeBox">
+
+<h3>AI-Assisted Market Analysis</h3>
+
+<p id="analysis" style="color:var(--muted)">
+Select a market and generate an educational analysis.
+</p>
+
+<button class="btn secondary" onclick="analyze()">
+Analyze selected market
+</button>
+
+</div>
+
+</div>
+
+<div class="tableBox">
+
+<h3>Open Positions</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Market</th>
+<th>Side</th>
+<th>Lots</th>
+<th>Entry</th>
+<th>Current</th>
+<th>P/L</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="positions"></tbody>
+
+</table>
+
+</div>
+
+<div class="tableBox">
+
+<h3>Trade History</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Time</th>
+<th>Market</th>
+<th>Side</th>
+<th>Lots</th>
+<th>Entry</th>
+<th>Exit</th>
+<th>P/L</th>
+</tr>
+</thead>
+
+<tbody id="history"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+<div class="container">
+© 2026 Virexa Markets. Development / simulated environment. Not a live brokerage service.
+</div>
+</footer>
+
+<!-- AUTH MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modalBox">
+
+<button class="close" onclick="closeModal()">×</button>
+
+<h2 id="modalTitle">Create demo account</h2>
+
+<div id="nameField" class="field">
+<label>Name</label>
+<input id="name" type="text" placeholder="Your name">
+</div>
+
+<div class="field">
+<label>Email</label>
+<input id="email" type="email" placeholder="you@example.com">
+</div>
+
+<div class="field">
+<label>Password</label>
+<input id="password" type="password" placeholder="At least 6 characters">
+</div>
+
+<div class="message" id="message"></div>
+
+<button class="btn primary" style="width:100%" onclick="submitAuth()" id="submitButton">
+Create demo account
+</button>
+
+<p style="color:var(--muted);font-size:13px" id="switch">
+Already have an account?
+<button onclick="openLogin()" style="background:none;color:var(--green);border:0">
+Log in
+</button>
+</p>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const markets=[
+["EUR/USD",1.1742,.32],
+["GBP/USD",1.3468,.21],
+["USD/JPY",147.82,.18],
+["AUD/USD",.6584,.27],
+["USD/CAD",1.3831,-.12],
+["USD/CHF",.7921,.15],
+["NZD/USD",.5948,-.08],
+["EUR/GBP",.8714,.11],
+["EUR/JPY",173.54,.24],
+["GBP/JPY",198.74,.31],
+["AUD/JPY",97.33,.19],
+["XAU/USD",3742.60,.45],
+["XAG/USD",44.12,.34],
+["BTC/USD",108240,.72],
+["ETH/USD",3924,.48],
+["US30",46210,.18],
+["NAS100",23840,.28],
+["SPX500",6640,.16],
+["GER40",23680,.09],
+["UK100",9275,-.05]
+];
+
+let prices=markets.map(x=>x[1]);
+let side="BUY";
+let balance=10000;
+let positions=[];
+let history=[];
+
+function money(n){
+return "$"+Number(n).toLocaleString(undefined,{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+}
+
+function price(n){
+return n>=1000
+?n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})
+:n>=10
+?n.toFixed(2)
+:n.toFixed(4);
+}
+
+function toast(text){
+const t=document.getElementById("toast");
+t.textContent=text;
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+function renderMarkets(){
+
+document.getElementById("marketWatch").innerHTML=
+markets.slice(0,6).map((m,i)=>`
+<div class="market">
+<div>
+<strong>${m[0]}</strong>
+<br>
+<small class="${m[2]>=0?"green":"red"}">
+${m[2]>=0?"+":""}${m[2].toFixed(2)}%
+</small>
+</div>
+<strong>${price(prices[i])}</strong>
+</div>
+`).join("");
+
+document.getElementById("marketCards").innerHTML=
+markets.slice(0,6).map((m,i)=>`
+<div class="card">
+<h3>${m[0]}</h3>
+<h2>${price(prices[i])}</h2>
+<p class="${m[2]>=0?"green":"red"}">
+${m[2]>=0?"+":""}${m[2].toFixed(2)}% simulated
+</p>
+</div>
+`).join("");
+
+document.getElementById("tradeMarket").innerHTML=
+markets.map((m,i)=>`
+<option value="${i}">${m[0]}</option>
+`).join("");
+
+}
+
+function openSignup(){
+
+document.getElementById("modal").classList.add("show");
+
+document.getElementById("modalTitle").textContent=
+"Create demo account";
+
+document.getElementById("nameField").style.display="block";
+
+document.getElementById("submitButton").textContent=
+"Create demo account";
+
+document.getElementById("switch").innerHTML=
+`Already have an account?
+<button onclick="openLogin()" style="background:none;color:var(--green);border:0">
+Log in
+</button>`;
+
+document.getElementById("message").textContent="";
+
+}
+
+function openLogin(){
+
+document.getElementById("modal").classList.add("show");
+
+document.getElementById("modalTitle").textContent="Log in";
+
+document.getElementById("nameField").style.display="none";
+
+document.getElementById("submitButton").textContent="Log in";
+
+document.getElementById("switch").innerHTML=
+`New here?
+<button onclick="openSignup()" style="background:none;color:var(--green);border:0">
+Create account
+</button>`;
+
+document.getElementById("message").textContent="";
+
+}
+
+function closeModal(){
+document.getElementById("modal").classList.remove("show");
+}
+
+function submitAuth(){
+
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const name=document.getElementById("name").value.trim();
+
+const login=
+document.getElementById("nameField").style.display==="none";
+
+if(!email || !password || (!login && !name)){
+document.getElementById("message").textContent=
+"Please complete all required fields.";
+return;
+}
+
+if(password.length<6){
+document.getElementById("message").textContent=
+"Password must contain at least 6 characters.";
+return;
+}
+
+localStorage.setItem("virexaUser",JSON.stringify({
+email:email,
+name:name || "Demo User"
+}));
+
+enterDashboard();
+
+}
+
+function enterDashboard(){
+
+closeModal();
+
+document.getElementById("landing").style.display="none";
+document.getElementById("dashboard").style.display="block";
+
+window.scrollTo(0,0);
+
+renderDashboard();
+
+toast("Demo account ready");
+
+}
+
+function logout(){
+
+document.getElementById("dashboard").style.display="none";
+document.getElementById("landing").style.display="block";
+
+window.scrollTo(0,0);
+
+toast("Logged out");
+
+}
+
+function setSide(value){
+
+side=value;
+
+const buy=document.getElementById("buyButton");
+const sell=document.getElementById("sellButton");
+
+buy.className=value==="BUY"?"buyActive":"";
+sell.className=value==="SELL"?"sellActive":"";
+
+document.querySelector(
+'#dashboard .tradeBox button[onclick="placeTrade()"]'
+).textContent=
+"Place simulated "+value;
+
+}
+
+function placeTrade(){
+
+const i=Number(document.getElementById("tradeMarket").value);
+const lot=Number(document.getElementById("lot").value);
+const lev=Number(document.getElementById("leverage").value);
+
+if(!lot || lot<=0){
+toast("Enter a valid lot size");
+return;
+}
+
+positions.push({
+market:i,
+side:side,
+lot:lot,
+leverage:lev,
+entry:prices[i]
+});
+
+renderDashboard();
+
+toast(side+" position opened");
+
+}
+
+function closePosition(index){
+
+const p=positions[index];
+
+const difference=
+p.side==="BUY"
+?prices[p.market]-p.entry
+:p.entry-prices[p.market];
+
+const pnl=difference*p.lot*100;
+
+balance+=pnl;
+
+history.push({
+time:new Date().toLocaleTimeString(),
+market:p.market,
+side:p.side,
+lot:p.lot,
+entry:p.entry,
+exit:prices[p.market],
+pnl:pnl
+});
+
+positions.splice(index,1);
+
+renderDashboard();
+
+toast("Position closed");
+
+}
+
+function renderDashboard(){
+
+let floating=0;
+let margin=0;
+
+positions.forEach(p=>{
+
+const difference=
+p.side==="BUY"
+?prices[p.market]-p.entry
+:p.entry-prices[p.market];
+
+floating+=difference*p.lot*100;
+
+margin+=p.entry*p.lot/p.leverage;
+
+});
+
+document.getElementById("balance").textContent=money(balance);
+
+document.getElementById("equity").textContent=
+money(balance+floating);
+
+document.getElementById("margin").textContent=
+money(margin);
+
+document.getElementById("freeMargin").textContent=
+money(balance+floating-margin);
+
+document.getElementById("positionCount").textContent=
+positions.length;
+
+const body=document.getElementById("positions");
+
+if(!positions.length){
+
+body.innerHTML=
+`<tr>
+<td colspan="7" style="color:var(--muted)">
+No open positions.
+</td>
+</tr>`;
+
+}else{
+
+body.innerHTML=positions.map((p,i)=>{
+
+const difference=
+p.side==="BUY"
+?prices[p.market]-p.entry
+:p.entry-prices[p.market];
+
+const pnl=difference*p.lot*100;
+
+return `
+<tr>
+<td>${markets[p.market][0]}</td>
+<td class="${p.side==="BUY"?"green":"red"}">${p.side}</td>
+<td>${p.lot.toFixed(2)}</td>
+<td>${price(p.entry)}</td>
+<td>${price(prices[p.market])}</td>
+<td class="${pnl>=0?"green":"red"}">${money(pnl)}</td>
+<td>
+<button class="btn secondary" onclick="closePosition(${i})">
+Close
+</button>
+</td>
+</tr>
+`;
+
+}).join("");
+
+}
+
+const historyBody=document.getElementById("history");
+
+if(!history.length){
+
+historyBody.innerHTML=
+`<tr>
+<td colspan="7" style="color:var(--muted)">
+No completed trades yet.
+</td>
+</tr>`;
+
+}else{
+
+historyBody.innerHTML=
+history.slice().reverse().map(h=>`
+<tr>
+<td>${h.time}</td>
+<td>${markets[h.market][0]}</td>
+<td>${h.side}</td>
+<td>${h.lot.toFixed
