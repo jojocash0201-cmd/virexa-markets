@@ -1541,5 +1541,32 @@ window.submitAuth = function(){
   enterDashboard();
 };
 </script>
+<script>
+document.addEventListener("click", function(e) {
+  if (e.target.tagName === "BUTTON" &&
+      (e.target.textContent.includes("Create Account") ||
+       e.target.textContent.includes("Open Account"))) {
+
+    if (e.target.textContent.includes("Create Account")) {
+      const name = document.getElementById("authName")?.value.trim() || "Demo Trader";
+      const email = document.getElementById("authEmail")?.value.trim();
+      const password = document.getElementById("authPassword")?.value;
+
+      if (!email || !password || password.length < 6) {
+        alert("Enter an email and a password of at least 6 characters.");
+        return;
+      }
+
+      localStorage.setItem("virexaUser", JSON.stringify({
+        name: name,
+        email: email
+      }));
+
+      if (typeof closeModal === "function") closeModal();
+      if (typeof enterDashboard === "function") enterDashboard();
+    }
+  }
+});
+</script>
 </body>
 </html>
