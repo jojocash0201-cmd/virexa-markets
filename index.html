@@ -2436,6 +2436,33 @@ initialiseDashboard();
 
 </script>
 
+<script>
+
+window.logout = function(){
+
+  const dashboard =
+    document.getElementById("dashboard");
+
+  const landing =
+    document.getElementById("landing");
+
+
+  if(dashboard){
+
+    dashboard.style.display = "none";
+
+  }
+
+
+  if(landing){
+
+    landing.style.display = "block";
+
+  }
+
+};
+
+</script>
 
 </body>
 
