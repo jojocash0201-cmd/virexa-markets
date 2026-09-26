@@ -1504,5 +1504,20 @@ document.addEventListener("DOMContentLoaded", function () {
 <button onclick="alert('openSignup = ' + typeof openSignup + '\nopenLogin = ' + typeof openLogin)" style="position:fixed;bottom:20px;right:20px;z-index:999999;padding:15px;z-index:999999;">
 CHECK
 </button>
+<script>
+window.openSignup = function(){
+  document.getElementById("modal").classList.add("show");
+  document.getElementById("authTitle").textContent = "Create Demo Account";
+  document.getElementById("authAction").textContent = "Create Account";
+  document.getElementById("authMode").value = "signup";
+};
+
+window.openLogin = function(){
+  document.getElementById("modal").classList.add("show");
+  document.getElementById("authTitle").textContent = "Login";
+  document.getElementById("authAction").textContent = "Login";
+  document.getElementById("authMode").value = "login";
+};
+</script>
 </body>
 </html>
