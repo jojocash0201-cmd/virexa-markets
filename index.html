@@ -1202,4 +1202,301 @@ history.slice().reverse().map(h=>`
 <td>${h.time}</td>
 <td>${markets[h.market][0]}</td>
 <td>${h.side}</td>
-<td>${h.lot.toFixed
+<td>(2)}</td>
+<td>${h.entry.toFixed(5)}</td>
+<td>${h.exit.toFixed(5)}</td>
+<td>${h.pnl.toFixed(2)}</td>
+</tr>
+`).join("");
+}
+
+const modal=document.getElementById("modal");
+
+function openSignup(){
+  modal.classList.add("show");
+  document.getElementById("authTitle").textContent="Create Demo Account";
+  document.getElementById("authAction").textContent="Create Account";
+  document.getElementById("authMode").value="signup";
+}
+
+function openLogin(){
+  modal.classList.add("show");
+  document.getElementById("authTitle").textContent="Login";
+  document.getElementById("authAction").textContent="Login";
+  document.getElementById("authMode").value="login";
+}
+
+function closeModal(){
+  modal.classList.remove("show");
+}
+
+function submitAuth(){
+  const name=document.getElementById("authName").value.trim();
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+
+  if(!email || !password || password.length<6){
+    alert("Please enter a valid email and a password of at least 6 characters.");
+    return;
+  }
+
+  const user={
+    name:name || "Demo Trader",
+    email:email
+  };
+
+  localStorage.setItem("virexaUser",JSON.stringify(user));
+
+  closeModal();
+  enterDashboard();
+}
+
+function enterDashboard(){
+  document.getElementById("landing").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+
+  const saved=localStorage.getItem("virexaUser");
+
+  if(saved){
+    const user=JSON.parse(saved);
+    const nameEl=document.getElementById("dashUser");
+
+    if(nameEl){
+      nameEl.textContent=user.name || "Demo Trader";
+    }
+  }
+
+  renderDashboard();
+}
+
+function logout(){
+  localStorage.removeItem("virexaUser");
+  document.getElementById("dashboard").style.display="none";
+  document.getElementById("landing").style.display="block";
+}
+
+function setSide(side){
+  currentSide=side;
+
+  const buy=document.getElementById("buyBtn");
+  const sell=document.getElementById("sellBtn");
+
+  if(buy) buy.classList.toggle("active",side==="BUY");
+  if(sell) sell.classList.toggle("active",side==="SELL");
+}
+
+function placeTrade(){
+  const marketSelect=document.getElementById("tradeMarket");
+  const lotInput=document.getElementById("lot");
+  const leverageInput=document.getElementById("leverage");
+  const slInput=document.getElementById("sl");
+  const tpInput=document.getElementById("tp");
+
+  if(!marketSelect || !lotInput) return;
+
+  const market=marketSelect.value;
+  const lot=parseFloat(lotInput.value) || 0.01;
+  const leverage=parseInt(leverageInput?.value) || 100;
+
+  if(lot<=0){
+    alert("Enter a valid lot size.");
+    return;
+  }
+
+  const price=markets[market][1];
+
+  positions.push({
+    id:Date.now(),
+    market:market,
+    side:currentSide,
+    lot:lot,
+    leverage:leverage,
+    entry:price,
+    sl:slInput?.value || "",
+    tp:tpInput?.value || "",
+    time:new Date().toLocaleTimeString()
+  });
+
+  renderDashboard();
+}
+
+function closePosition(id){
+  const index=positions.findIndex(p=>p.id===id);
+
+  if(index===-1) return;
+
+  const p=positions[index];
+  const current=markets[p.market][1];
+
+  let pnl=0;
+
+  if(p.side==="BUY"){
+    pnl=(current-p.entry)*p.lot*100000;
+  }else{
+    pnl=(p.entry-current)*p.lot*100000;
+  }
+
+  balance+=pnl;
+
+  history.push({
+    time:new Date().toLocaleTimeString(),
+    market:p.market,
+    side:p.side,
+    lot:p.lot,
+    entry:p.entry,
+    exit:current,
+    pnl:pnl
+  });
+
+  positions.splice(index,1);
+  renderDashboard();
+}
+
+function renderDashboard(){
+  const balanceEl=document.getElementById("balance");
+  const equityEl=document.getElementById("equity");
+  const marginEl=document.getElementById("margin");
+  const freeEl=document.getElementById("freeMargin");
+
+  let floating=0;
+  let margin=0;
+
+  positions.forEach(p=>{
+    const current=markets[p.market][1];
+
+    if(p.side==="BUY"){
+      floating+=(current-p.entry)*p.lot*100000;
+    }else{
+      floating+=(p.entry-current)*p.lot*100000;
+    }
+
+    margin+=(p.entry*p.lot)/p.leverage;
+  });
+
+  const equity=balance+floating;
+  const freeMargin=equity-margin;
+
+  if(balanceEl) balanceEl.textContent="$"+balance.toFixed(2);
+  if(equityEl) equityEl.textContent="$"+equity.toFixed(2);
+  if(marginEl) marginEl.textContent="$"+margin.toFixed(2);
+  if(freeEl) freeEl.textContent="$"+freeMargin.toFixed(2);
+
+  const positionsBody=document.getElementById("positions");
+
+  if(positionsBody){
+    if(!positions.length){
+      positionsBody.innerHTML=`
+        <tr>
+          <td colspan="8" style="color:var(--muted)">
+            No open positions.
+          </td>
+        </tr>`;
+    }else{
+      positionsBody.innerHTML=positions.map(p=>{
+        const current=markets[p.market][1];
+
+        let pnl=0;
+
+        if(p.side==="BUY"){
+          pnl=(current-p.entry)*p.lot*100000;
+        }else{
+          pnl=(p.entry-current)*p.lot*100000;
+        }
+
+        return `
+          <tr>
+            <td>${p.time}</td>
+            <td>${markets[p.market][0]}</td>
+            <td>${p.side}</td>
+            <td>${p.lot.toFixed(2)}</td>
+            <td>${p.entry.toFixed(5)}</td>
+            <td>${current.toFixed(5)}</td>
+            <td>${pnl.toFixed(2)}</td>
+            <td>
+              <button onclick="closePosition(${p.id})">
+                Close
+              </button>
+            </td>
+          </tr>`;
+      }).join("");
+    }
+  }
+}
+
+function analyze(){
+  const marketSelect=document.getElementById("analysisMarket");
+
+  if(!marketSelect) return;
+
+  const market=marketSelect.value;
+  const data=markets[market];
+
+  const price=data[1];
+  const change=data[2];
+
+  let outlook="Neutral";
+
+  if(change>0.2){
+    outlook="Bullish";
+  }else if(change<-0.2){
+    outlook="Bearish";
+  }
+
+  const result=document.getElementById("analysisResult");
+
+  if(result){
+    result.innerHTML=`
+      <strong>${data[0]}</strong><br><br>
+      Current simulated price: ${price}<br>
+      Simulated change: ${change.toFixed(2)}%<br>
+      Educational outlook: <strong>${outlook}</strong><br><br>
+      This is simulated educational analysis and is not financial advice.
+    `;
+  }
+}
+
+setInterval(()=>{
+  markets.forEach(m=>{
+    const movement=(Math.random()-0.5)*0.0008;
+    m[1]=m[1]*(1+movement);
+    m[2]=movement*100;
+  });
+
+  const marketPrice=document.getElementById("marketPrice");
+
+  if(marketPrice){
+    const selected=document.getElementById("tradeMarket");
+
+    if(selected){
+      const m=markets[selected.value];
+      if(m){
+        marketPrice.textContent=m[1].toFixed(5);
+      }
+    }
+  }
+
+  if(document.getElementById("dashboard").style.display!=="none"){
+    renderDashboard();
+  }
+},2500);
+
+document.addEventListener("DOMContentLoaded",()=>{
+  renderDashboard();
+
+  const tradeMarket=document.getElementById("tradeMarket");
+
+  if(tradeMarket){
+    tradeMarket.addEventListener("change",()=>{
+      const m=markets[tradeMarket.value];
+      const price=document.getElementById("marketPrice");
+
+      if(price && m){
+        price.textContent=m[1].toFixed(5);
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>
